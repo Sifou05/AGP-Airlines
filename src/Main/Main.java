@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
         JFrame frame = new JFrame("AGP Airlines");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1920, 1080);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setLayout(new BorderLayout());
 
         JPanel mainPanel = new JPanel();
@@ -40,6 +40,7 @@ public class Main {
         mainPanel.add(label4);
 
         JButton burgerButton = new JButton("\u2630");
+        JPanel northPanel = new JPanel(new BorderLayout());
         JPanel topRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         topRightPanel.add(burgerButton);
 
@@ -159,25 +160,66 @@ public class Main {
         frame.setVisible(true);
     }
 
-    // Method to create and display the Cancel Flight window
+    // 
     private static void openCancelFlightWindow() {
         JFrame cancelFrame = new JFrame("Cancel Flight - AGP Airlines");
         cancelFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        cancelFrame.setSize(800, 600);
-        cancelFrame.setLocationRelativeTo(null); // Center the window
+        cancelFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        cancelFrame.setLocationRelativeTo(null); 
         
         JPanel cancelPanel = new JPanel();
         cancelPanel.setLayout(new BorderLayout());
         cancelPanel.setBackground(Color.WHITE);
         
-        // You can add components here for the cancel flight functionality
         JLabel titleLabel = new JLabel("Cancel Flight", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
         titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         
+        JLabel bodyLabel = new JLabel("<html><div style='width: 700px;'>While travelling we often face unexpected obstacles and changes. We get it! Using our user-friendly 'cancel' option, Agp flight bookings can be refunded easily. The reimbursement of the airfare is contingent upon the fare conditions.</div></html>");
+        bodyLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        bodyLabel.setBorder(BorderFactory.createEmptyBorder(10, 20, 0, 0)); 
+        bodyLabel.setVerticalAlignment(SwingConstants.TOP);
+        bodyLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        
         cancelPanel.add(titleLabel, BorderLayout.NORTH);
+        cancelPanel.add(bodyLabel, BorderLayout.CENTER);
+        
+        JPanel formPanel = new JPanel();
+        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
+        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
+        
+        JLabel bookingLabel = new JLabel("Booking ID:");
+        bookingLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        JTextField bookingField = new JTextField(20);
+        bookingField.setMaximumSize(new Dimension(300, 30));
+        
+        JLabel lastNameLabel = new JLabel("Last Name:");
+        lastNameLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        JTextField lastNameField = new JTextField(20);
+        lastNameField.setMaximumSize(new Dimension(300, 30));
+        
+        JButton cancelButton = new JButton("Cancel My Flight");
+        cancelButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+        
+        formPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(bookingLabel);
+        formPanel.add(Box.createVerticalStrut(5));
+        formPanel.add(bookingField);
+        formPanel.add(Box.createVerticalStrut(15));
+        formPanel.add(lastNameLabel);
+        formPanel.add(Box.createVerticalStrut(5));
+        formPanel.add(lastNameField);
+        formPanel.add(Box.createVerticalStrut(20));
+        formPanel.add(cancelButton);
+        
+        JPanel contentPanel = new JPanel(new BorderLayout());
+        contentPanel.add(bodyLabel, BorderLayout.NORTH);
+        contentPanel.add(formPanel, BorderLayout.CENTER);
+        
+        cancelPanel.add(titleLabel, BorderLayout.NORTH);
+        cancelPanel.add(contentPanel, BorderLayout.CENTER);
         
         cancelFrame.add(cancelPanel);
-        cancelFrame.setVisible(true);
+        cancelFrame.setVisible(true);        
     }
 }
