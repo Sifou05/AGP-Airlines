@@ -1,6 +1,9 @@
-package Main;
+package main;
 
 import javax.swing.*;
+
+import booking.*;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -101,16 +104,15 @@ public class Main {
                 "Manila Ninoy Aquino (MNL) - Philippines", "Doha Hamad International (DOH) - Qatar"
         };
 
-        JComboBox<String> destinationBox = new JComboBox<>(destinations);
-        destinationBox.setMaximumSize(new Dimension(300, 30));
-        destinationBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // Departure
 
-        JPanel destinationPanel = new JPanel();
-        destinationPanel.setLayout(new FlowLayout());
-        destinationPanel.add(destinationBox);
-        destinationPanel.setVisible(false);
-        mainPanel.add(destinationPanel);
+        JComboBox<String> departureBox = new JComboBox<>(destinations);
+        JPanel departurePanel = new JPanel();
+        departurePanel.add(departureBox);
+        departurePanel.setVisible(false);
+        mainPanel.add(departurePanel);
 
+        // Arrival
         JLabel label6 = new JLabel("Arrival airport", SwingConstants.CENTER);
         label6.setFont(new Font("Arial", Font.PLAIN, 20));
         label6.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -118,34 +120,146 @@ public class Main {
         mainPanel.add(Box.createVerticalStrut(5));
         mainPanel.add(label6);
 
-        JComboBox<String> destinationBox2 = new JComboBox<>(destinations);
-        destinationBox2.setMaximumSize(new Dimension(300, 30));
-        destinationBox2.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JComboBox<String> arrivalBox = new JComboBox<>(destinations);
+        JPanel arrivalPanel = new JPanel();
+        arrivalPanel.add(arrivalBox);
+        arrivalPanel.setVisible(false);
+        mainPanel.add(arrivalPanel);
 
-        JPanel destinationPanel2 = new JPanel();
-        destinationPanel2.setLayout(new FlowLayout());
-        destinationPanel2.add(destinationBox2);
-        destinationPanel2.setVisible(false);
-        mainPanel.add(destinationPanel2);
+        // Category
+        JLabel label7 = new JLabel("Category position", SwingConstants.CENTER);
+        label7.setFont(new Font("Arial", Font.PLAIN, 20));
+        label7.setAlignmentX(Component.CENTER_ALIGNMENT);
+        label7.setVisible(false);
+        mainPanel.add(Box.createVerticalStrut(5));
+        mainPanel.add(label7);
 
-        // ActionListener for "Return" button
+        Choice position = new Choice();
+        position.add("Economy class");
+        position.add("Business class");
+        position.add("Exclusive class");
+        position.add("Exclusive+ class");
+        JPanel categoryPanel = new JPanel();
+        categoryPanel.add(position);
+        categoryPanel.setVisible(false);
+        mainPanel.add(categoryPanel);
+
+        JLabel label8 = new JLabel("Passengers", SwingConstants.CENTER);
+        label8.setFont(new Font("Arial", Font.PLAIN, 20));
+        label8.setAlignmentX(Component.CENTER_ALIGNMENT);
+        label8.setVisible(false);
+        mainPanel.add(Box.createVerticalStrut(5));
+        mainPanel.add(label8);
+
+        JPanel passengerPanel = new JPanel();
+        passengerPanel.setLayout(new GridLayout(4, 1));
+        passengerPanel.setVisible(false);
+
+        final int[] adults = {0};
+        final int[] children = {0};
+        final int[] infants = {0};
+
+        JLabel adultLabel = new JLabel("0");
+        JLabel childrenLabel = new JLabel("0");
+        JLabel infantsLabel = new JLabel("0");
+        JLabel totalLabel = new JLabel("All passengers: 0", SwingConstants.CENTER);
+        totalLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+
+        JPanel adultsPanel = new JPanel();
+        adultsPanel.add(new JLabel("Adults (age>18): "));
+        JButton minusAdult = new JButton("-");
+        JButton plusAdult = new JButton("+");
+        adultsPanel.add(minusAdult);
+        adultsPanel.add(adultLabel);
+        adultsPanel.add(plusAdult);
+        passengerPanel.add(adultsPanel);
+
+        JPanel childrenPanel = new JPanel();
+        childrenPanel.add(new JLabel("Children (age:3-18): "));
+        JButton minusChild = new JButton("-");
+        JButton plusChild = new JButton("+");
+        childrenPanel.add(minusChild);
+        childrenPanel.add(childrenLabel);
+        childrenPanel.add(plusChild);
+        passengerPanel.add(childrenPanel);
+
+        JPanel infantsPanel = new JPanel();
+        infantsPanel.add(new JLabel("Infants (age<3): "));
+        JButton minusInfant = new JButton("-");
+        JButton plusInfant = new JButton("+");
+        infantsPanel.add(minusInfant);
+        infantsPanel.add(infantsLabel);
+        infantsPanel.add(plusInfant);
+        passengerPanel.add(infantsPanel);
+
+        passengerPanel.add(totalLabel);
+        mainPanel.add(passengerPanel);
+
+        ActionListener updateTotal = e -> {
+            int total = adults[0] + children[0] + infants[0];
+            totalLabel.setText("All passengers: " + total);
+        };
+
+        plusAdult.addActionListener(e -> {
+            adults[0]++;
+            adultLabel.setText(String.valueOf(adults[0]));
+            updateTotal.actionPerformed(null);
+        });
+
+        minusAdult.addActionListener(e -> {
+            adults[0] = Math.max(0, adults[0] - 1);
+            adultLabel.setText(String.valueOf(adults[0]));
+            updateTotal.actionPerformed(null);
+        });
+
+        plusChild.addActionListener(e -> {
+            children[0]++;
+            childrenLabel.setText(String.valueOf(children[0]));
+            updateTotal.actionPerformed(null);
+        });
+
+        minusChild.addActionListener(e -> {
+            children[0] = Math.max(0, children[0] - 1);
+            childrenLabel.setText(String.valueOf(children[0]));
+            updateTotal.actionPerformed(null);
+        });
+
+        plusInfant.addActionListener(e -> {
+            infants[0]++;
+            infantsLabel.setText(String.valueOf(infants[0]));
+            updateTotal.actionPerformed(null);
+        });
+
+        minusInfant.addActionListener(e -> {
+            infants[0] = Math.max(0, infants[0] - 1);
+            infantsLabel.setText(String.valueOf(infants[0]));
+            updateTotal.actionPerformed(null);
+        });
+
         btn1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 label5.setVisible(true);
-                destinationPanel.setVisible(true);
-
+                departurePanel.setVisible(true);
                 label6.setVisible(true);
-                destinationPanel2.setVisible(true);
-
+                arrivalPanel.setVisible(true);
+                label7.setVisible(true);
+                categoryPanel.setVisible(true);
+                position.setVisible(true);
+                label8.setVisible(true);
+                passengerPanel.setVisible(true);
                 mainPanel.revalidate();
                 mainPanel.repaint();
             }
         });
 
         burgerButton.addActionListener(e -> menu.show(burgerButton, 0, burgerButton.getHeight()));
+        
+        item2.addActionListener(e -> {
+        	ChangeBooking dialogBooking = new ChangeBooking(frame);
+        	dialogBooking.setVisible(true);
+        });
 
-        // ActionListener for "Cancel flight" menu item
         item3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -160,47 +274,44 @@ public class Main {
         frame.setVisible(true);
     }
 
-    // 
+    // Παράθυρο για ακύρωση πτήσης
     private static void openCancelFlightWindow() {
         JFrame cancelFrame = new JFrame("Cancel Flight - AGP Airlines");
         cancelFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         cancelFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        cancelFrame.setLocationRelativeTo(null); 
-        
+        cancelFrame.setLocationRelativeTo(null);
+
         JPanel cancelPanel = new JPanel();
         cancelPanel.setLayout(new BorderLayout());
         cancelPanel.setBackground(Color.WHITE);
-        
+
         JLabel titleLabel = new JLabel("Cancel Flight", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
         titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
-        
+
         JLabel bodyLabel = new JLabel("<html><div style='width: 700px;'>While travelling we often face unexpected obstacles and changes. We get it! Using our user-friendly 'cancel' option, Agp flight bookings can be refunded easily. The reimbursement of the airfare is contingent upon the fare conditions.</div></html>");
         bodyLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-        bodyLabel.setBorder(BorderFactory.createEmptyBorder(10, 20, 0, 0)); 
+        bodyLabel.setBorder(BorderFactory.createEmptyBorder(10, 20, 0, 0));
         bodyLabel.setVerticalAlignment(SwingConstants.TOP);
         bodyLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        
-        cancelPanel.add(titleLabel, BorderLayout.NORTH);
-        cancelPanel.add(bodyLabel, BorderLayout.CENTER);
-        
+
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
         formPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
-        
+
         JLabel bookingLabel = new JLabel("Booking ID:");
         bookingLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         JTextField bookingField = new JTextField(20);
         bookingField.setMaximumSize(new Dimension(300, 30));
-        
+
         JLabel lastNameLabel = new JLabel("Last Name:");
         lastNameLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         JTextField lastNameField = new JTextField(20);
         lastNameField.setMaximumSize(new Dimension(300, 30));
-        
+
         JButton cancelButton = new JButton("Cancel My Flight");
         cancelButton.setAlignmentX(Component.LEFT_ALIGNMENT);
-        
+
         formPanel.add(Box.createVerticalStrut(10));
         formPanel.add(bookingLabel);
         formPanel.add(Box.createVerticalStrut(5));
@@ -211,15 +322,15 @@ public class Main {
         formPanel.add(lastNameField);
         formPanel.add(Box.createVerticalStrut(20));
         formPanel.add(cancelButton);
-        
+
         JPanel contentPanel = new JPanel(new BorderLayout());
         contentPanel.add(bodyLabel, BorderLayout.NORTH);
         contentPanel.add(formPanel, BorderLayout.CENTER);
-        
+
         cancelPanel.add(titleLabel, BorderLayout.NORTH);
         cancelPanel.add(contentPanel, BorderLayout.CENTER);
-        
+
         cancelFrame.add(cancelPanel);
-        cancelFrame.setVisible(true);        
+        cancelFrame.setVisible(true);
     }
 }
