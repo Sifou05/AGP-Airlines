@@ -6,6 +6,11 @@ import booking.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -82,35 +87,33 @@ public class Main {
         mainPanel.add(Box.createVerticalStrut(5));
         mainPanel.add(label5);
 
-        String[] destinations = {
-                "Athens (ATH) - Greece", "Thessaloniki (SKG) - Greece", "Heraklion (HER) - Greece",
-                "London Heathrow (LHR) - United Kingdom", "London Gatwick (LGW) - United Kingdom",
-                "Paris Charles de Gaulle (CDG) - France", "Paris Orly (ORY) - France",
-                "Amsterdam Schiphol (AMS) - Netherlands", "Frankfurt (FRA) - Germany", "Munich (MUC) - Germany",
-                "Rome Fiumicino (FCO) - Italy", "Milan Malpensa (MXP) - Italy",
-                "Barcelona El Prat (BCN) - Spain", "Madrid Barajas (MAD) - Spain",
-                "Vienna International (VIE) - Austria", "Zurich (ZRH) - Switzerland",
-                "Copenhagen (CPH) - Denmark", "Stockholm Arlanda (ARN) - Sweden", "Oslo Gardermoen (OSL) - Norway",
-                "Dublin (DUB) - Ireland", "Lisbon Humberto Delgado (LIS) - Portugal", "Brussels Airport (BRU) - Belgium",
-                "Warsaw Chopin (WAW) - Poland", "Prague Vaclav Havel (PRG) - Czech Republic",
-                "Budapest Ferenc Liszt (BUD) - Hungary", "Dubai International (DXB) - UAE",
-                "Abu Dhabi International (AUH) - UAE", "Doha Hamad International (DOH) - Qatar",
-                "Istanbul Airport (IST) - Turkey", "Tel Aviv Ben Gurion (TLV) - Israel",
-                "Tokyo Narita (NRT) - Japan", "Tokyo Haneda (HND) - Japan", "Seoul Incheon (ICN) - South Korea",
-                "Beijing Capital (PEK) - China", "Shanghai Pudong (PVG) - China", "Hong Kong International (HKG) - Hong Kong",
-                "Bangkok Suvarnabhumi (BKK) - Thailand", "Singapore Changi (SIN) - Singapore",
-                "Kuala Lumpur International (KUL) - Malaysia", "New Delhi Indira Gandhi (DEL) - India",
-                "Mumbai Chhatrapati Shivaji (BOM) - India", "Jakarta Soekarno-Hatta (CGK) - Indonesia",
-                "Manila Ninoy Aquino (MNL) - Philippines", "Doha Hamad International (DOH) - Qatar"
-        };
+        // NEW
+        // file destinations.txt has all destinations
+
+        String path = "src/main/destinations.txt";
+
+        List<String> destinations = new ArrayList<>();
+
+        try(BufferedReader reader = new BufferedReader(new FileReader(path))) {
+            String line;
+            while((line = reader.readLine()) != null) {
+                destinations.add(line);
+            }
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+
+        String[] destinationArray = destinations.toArray(new String[0]);
 
         // Departure
 
-        JComboBox<String> departureBox = new JComboBox<>(destinations);
+        JComboBox<String> departureBox = new JComboBox<>(destinationArray);
         JPanel departurePanel = new JPanel();
         departurePanel.add(departureBox);
         departurePanel.setVisible(false);
         mainPanel.add(departurePanel);
+
+        String selectedDeparture = (String) departureBox.getSelectedItem();
 
         // Arrival
         JLabel label6 = new JLabel("Arrival airport", SwingConstants.CENTER);
@@ -120,11 +123,19 @@ public class Main {
         mainPanel.add(Box.createVerticalStrut(5));
         mainPanel.add(label6);
 
-        JComboBox<String> arrivalBox = new JComboBox<>(destinations);
+        JComboBox<String> arrivalBox = new JComboBox<>(destinationArray);
         JPanel arrivalPanel = new JPanel();
         arrivalPanel.add(arrivalBox);
         arrivalPanel.setVisible(false);
         mainPanel.add(arrivalPanel);
+
+        String selectedArrival = (String) arrivalBox.getSelectedItem();
+
+        if(selectedDeparture.equals(selectedArrival)) {
+            // JOptionPane.showMessageDialog(null, "Wrong");
+        }
+
+        // NEW
 
         // Category
         JLabel label7 = new JLabel("Category position", SwingConstants.CENTER);
@@ -236,6 +247,17 @@ public class Main {
             updateTotal.actionPerformed(null);
         });
 
+        // NEW
+        // Add button Search flights
+
+        JButton search = new JButton("Search flights");
+        search.setAlignmentX(Component.CENTER_ALIGNMENT);
+        search.setVisible(false);
+        mainPanel.add(Box.createVerticalStrut(10));
+        mainPanel.add(search);
+
+        // NEW
+
         btn1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -248,16 +270,17 @@ public class Main {
                 position.setVisible(true);
                 label8.setVisible(true);
                 passengerPanel.setVisible(true);
+                search.setVisible(true);
                 mainPanel.revalidate();
                 mainPanel.repaint();
             }
         });
 
         burgerButton.addActionListener(e -> menu.show(burgerButton, 0, burgerButton.getHeight()));
-        
+
         item2.addActionListener(e -> {
-        	ChangeBooking dialogBooking = new ChangeBooking(frame);
-        	dialogBooking.setVisible(true);
+            ChangeBooking dialogBooking = new ChangeBooking(frame);
+            dialogBooking.setVisible(true);
         });
 
         item3.addActionListener(new ActionListener() {
@@ -334,3 +357,4 @@ public class Main {
         cancelFrame.setVisible(true);
     }
 }
+
