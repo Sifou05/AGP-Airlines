@@ -1,23 +1,18 @@
 package booking;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
 
+import java.awt.*;
 import javax.swing.*;
 
 public class CancelBooking extends JDialog {
 
-	public CancelBooking(JFrame mainWindow)
-	{
-		JFrame cancelFrame = new JFrame("Cancel Flight - AGP Airlines");
-        cancelFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        cancelFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        cancelFrame.setLocationRelativeTo(null);
+    public CancelBooking(JFrame mainWindow) {
+        super(mainWindow, "Cancel Flight - AGP Airlines", true); // true = modal
 
-        JPanel cancelPanel = new JPanel();
-        cancelPanel.setLayout(new BorderLayout());
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setSize(1920, 1080);
+        setLocationRelativeTo(null);
+
+        JPanel cancelPanel = new JPanel(new BorderLayout());
         cancelPanel.setBackground(Color.WHITE);
 
         JLabel titleLabel = new JLabel("Cancel Flight", SwingConstants.CENTER);
@@ -65,9 +60,20 @@ public class CancelBooking extends JDialog {
         cancelPanel.add(titleLabel, BorderLayout.NORTH);
         cancelPanel.add(contentPanel, BorderLayout.CENTER);
 
-        cancelFrame.add(cancelPanel);
-        cancelFrame.setVisible(true);
+        add(cancelPanel);
 
-	}
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                mainWindow.setVisible(true);
+            }
 
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                mainWindow.setVisible(true);
+            }
+        });
+        mainWindow.setVisible(false);
+        setVisible(true);
+    }
 }

@@ -1,4 +1,4 @@
-package Main;
+package main;
 
 import javax.swing.*;
 
@@ -263,8 +263,8 @@ public class Main {
         item3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CancelBooking dialogBooking = new CancelBooking(frame);
-                dialogBooking.setVisible(true);
+            	frame.setVisible(false);
+                new CancelBooking(frame);
             }
         });
 
