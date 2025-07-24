@@ -14,13 +14,13 @@ public class ChangeBooking extends JDialog
 		JMenuBar menuBar = new JMenuBar(); // menu bar
 		
 		// fields of menu bar
-		fieldReturn = new JMenu("Return");
-		fieldOneWay = new JMenu("One Way");
-		fieldMulticity = new JMenu("Multicity");
+		JMenu item1 = new JMenu("Return");
+		JMenu item2 = new JMenu("One Way");
+		JMenu item3 = new JMenu("Multicity");
 		
-		menuBar.add(fieldReturn);
-		menuBar.add(fieldOneWay);
-		menuBar.add(fieldMulticity);
+		menuBar.add(item1);
+		menuBar.add(item2);
+		menuBar.add(item3);
 		
 		this.setJMenuBar(menuBar);
 	}
