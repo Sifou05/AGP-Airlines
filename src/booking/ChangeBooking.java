@@ -24,4 +24,5 @@ public class ChangeBooking extends JDialog
 		
 		this.setJMenuBar(menuBar);
 	}
+	
 }
