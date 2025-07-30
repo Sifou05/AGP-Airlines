@@ -11,6 +11,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Main {
     public static void main(String[] args) {
@@ -135,8 +137,6 @@ public class Main {
             // JOptionPane.showMessageDialog(null, "Wrong");
         }
 
-        // NEW
-
         // Category
         JLabel label7 = new JLabel("Category position", SwingConstants.CENTER);
         label7.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -248,15 +248,107 @@ public class Main {
         });
 
         // NEW
-        // Add button Search flights
+        // Create two calendars, two items
 
-        JButton search = new JButton("Search flights");
-        search.setAlignmentX(Component.CENTER_ALIGNMENT);
-        search.setVisible(false);
+        CalendarPanel calendar = new CalendarPanel();
+        calendar.setVisible(false);
         mainPanel.add(Box.createVerticalStrut(10));
-        mainPanel.add(search);
+        mainPanel.add(calendar);
+
+        CalendarPanel2 calendar2 = new CalendarPanel2();
+        calendar2.setVisible(false);
+        mainPanel.add(Box.createVerticalStrut(10));
+        mainPanel.add(calendar2);
+
+        JPanel panelDiscount = new JPanel();
+        panelDiscount.setLayout(new BoxLayout(panelDiscount, BoxLayout.Y_AXIS));
+
+        // Link for discount code
+        JLabel hyperlink = new JLabel("<html><a href=''>Use promotional code</a></html>");
+        hyperlink.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        hyperlink.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel discount = new JLabel("Promotional code");
+        discount.setFont(new Font("Arial", Font.PLAIN, 20));
+        discount.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Write your code
+        JTextField discount2 = new JTextField(20);
+        discount2.setMaximumSize(new Dimension(200, 150));
+        discount2.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        hyperlink.setVisible(false);
+        discount.setVisible(false);
+        discount2.setVisible(false);
+
+        panelDiscount.add(Box.createVerticalStrut(10));
+        panelDiscount.add(hyperlink);
+        panelDiscount.add(Box.createVerticalStrut(10));
+        panelDiscount.add(discount);
+        panelDiscount.add(Box.createVerticalStrut(10));
+        panelDiscount.add(discount2);
+
+        JPanel panelDiscount2 = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panelDiscount2.add(panelDiscount);
+        mainPanel.add(panelDiscount2);
+
+        // Give your code
+        JButton discountButton = new JButton("Apply");
+        JPanel panelDiscount3 = new JPanel();
+        panelDiscount3.setLayout(new FlowLayout(FlowLayout.CENTER));
+        panelDiscount3.add(discountButton);
+        panelDiscount3.setVisible(false);
+        discountButton.setVisible(false);
+        mainPanel.add(Box.createVerticalStrut(10));
+        mainPanel.add(panelDiscount3);
+
+        // Cancel the discount code
+        JLabel back = new JLabel("<html><a href=''>Back</a></html>");
+        back.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        back.setAlignmentX(Component.CENTER_ALIGNMENT);
+        back.setVisible(false);
+
+        JPanel backPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        backPanel.add(back);
+        panelDiscount3.add(Box.createVerticalStrut(10));
+        panelDiscount3.add(backPanel);
+
+        // Press the link "Use promotional code"
+        hyperlink.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                hyperlink.setVisible(false);
+                discount.setVisible(true);
+                discount2.setVisible(true);
+                panelDiscount3.setVisible(true);
+                discountButton.setVisible(true);
+                back.setVisible(true);
+                mainPanel.revalidate();
+                mainPanel.repaint();
+            }
+        });
+
+        // Press the link "Back"
+        back.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                discount.setVisible(false);
+                discount2.setVisible(false);
+                discountButton.setVisible(false);
+                back.setVisible(false);
+                hyperlink.setVisible(true);
+            }
+        });
 
         // NEW
+
+        JButton search = new JButton("Search flights");
+        JPanel searchPanel = new JPanel();
+        searchPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        searchPanel.add(search);
+        searchPanel.setVisible(false);
+        mainPanel.add(Box.createVerticalStrut(10));
+        mainPanel.add(searchPanel);
 
         btn1.addActionListener(new ActionListener() {
             @Override
@@ -270,7 +362,13 @@ public class Main {
                 position.setVisible(true);
                 label8.setVisible(true);
                 passengerPanel.setVisible(true);
+                calendar.setVisible(true);
+                calendar2.setVisible(true);
                 search.setVisible(true);
+                searchPanel.setVisible(true);
+                hyperlink.setVisible(true);
+                discount.setVisible(false);
+                discount2.setVisible(false);
                 mainPanel.revalidate();
                 mainPanel.repaint();
             }
@@ -286,8 +384,7 @@ public class Main {
         item3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	frame.setVisible(false);
-                new CancelBooking(frame);
+                openCancelFlightWindow();
             }
         });
 
@@ -295,8 +392,72 @@ public class Main {
 
         frame.add(topRightPanel, BorderLayout.NORTH);
         frame.add(mainPanel, BorderLayout.CENTER);
+
+        JScrollPane scroll = new JScrollPane(mainPanel);
+        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        frame.add(scroll, BorderLayout.CENTER);
         frame.setVisible(true);
     }
 
-}
+    // Παράθυρο για ακύρωση πτήσης
+    private static void openCancelFlightWindow() {
+        JFrame cancelFrame = new JFrame("Cancel Flight - AGP Airlines");
+        cancelFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        cancelFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        cancelFrame.setLocationRelativeTo(null);
 
+        JPanel cancelPanel = new JPanel();
+        cancelPanel.setLayout(new BorderLayout());
+        cancelPanel.setBackground(Color.WHITE);
+
+        JLabel titleLabel = new JLabel("Cancel Flight", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+
+        JLabel bodyLabel = new JLabel("<html><div style='width: 700px;'>While travelling we often face unexpected obstacles and changes. We get it! Using our user-friendly 'cancel' option, Agp flight bookings can be refunded easily. The reimbursement of the airfare is contingent upon the fare conditions.</div></html>");
+        bodyLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        bodyLabel.setBorder(BorderFactory.createEmptyBorder(10, 20, 0, 0));
+        bodyLabel.setVerticalAlignment(SwingConstants.TOP);
+        bodyLabel.setHorizontalAlignment(SwingConstants.LEFT);
+
+        JPanel formPanel = new JPanel();
+        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
+        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
+
+        JLabel bookingLabel = new JLabel("Booking ID:");
+        bookingLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        JTextField bookingField = new JTextField(20);
+        bookingField.setMaximumSize(new Dimension(300, 30));
+
+        JLabel lastNameLabel = new JLabel("Last Name:");
+        lastNameLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        JTextField lastNameField = new JTextField(20);
+        lastNameField.setMaximumSize(new Dimension(300, 30));
+
+        JButton cancelButton = new JButton("Cancel My Flight");
+        cancelButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        formPanel.add(Box.createVerticalStrut(10));
+        formPanel.add(bookingLabel);
+        formPanel.add(Box.createVerticalStrut(5));
+        formPanel.add(bookingField);
+        formPanel.add(Box.createVerticalStrut(15));
+        formPanel.add(lastNameLabel);
+        formPanel.add(Box.createVerticalStrut(5));
+        formPanel.add(lastNameField);
+        formPanel.add(Box.createVerticalStrut(20));
+        formPanel.add(cancelButton);
+
+        JPanel contentPanel = new JPanel(new BorderLayout());
+        contentPanel.add(bodyLabel, BorderLayout.NORTH);
+        contentPanel.add(formPanel, BorderLayout.CENTER);
+
+        cancelPanel.add(titleLabel, BorderLayout.NORTH);
+        cancelPanel.add(contentPanel, BorderLayout.CENTER);
+
+        cancelFrame.add(cancelPanel);
+        cancelFrame.setVisible(true);
+    }
+}
